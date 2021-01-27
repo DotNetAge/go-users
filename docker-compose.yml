@@ -1,0 +1,19 @@
+version: "2.0"
+
+# 本地测试环境的Docker配置
+services:
+  postgres:
+    container_name: go_user_server_postgres
+    image: "postgres"
+    environment:
+      POSTGRES_USER: "go_user"
+      POSTGRES_PASSWORD: "go_123"
+      POSTGRES_DB: "go_ud"
+    logging:
+      driver: none
+  redis:
+    container_name: go_ud_redis
+    image: redis:4.0.13
+    restart: always
+    ports:
+      - "6379:6379"

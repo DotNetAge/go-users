@@ -1,0 +1,92 @@
+###
+# @name health-check
+GET {{baseUrl}}/health HTTP/1.1
+
+###
+# @name verify
+POST {{auth}}/verify HTTP/1.1
+Content-Type: application/json
+
+{
+    "client_id" : "{{client_id}}",
+    "mobile": "{{mobi}}"
+}
+
+###
+# @name authorize
+GET {{auth}}/authorize
+    ?client_id={{client_id}}
+    &response_type=code
+    &scope={{scope}}
+    &redirect_uri={{redirect_uri}}
+    &state= HTTP/1.1
+
+###
+# @name authorize 简化模式
+GET {{auth}}/authorize
+    ?response_type=token
+    &client_id={{client_id}}
+    &scope={{scope}}
+    &redirect_uri={{redirect_uri}}
+    &state= HTTP/1.1
+
+###
+# @name login
+POST {{auth}}/authorize HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+client_id={{client_id}}
+&mobile={{mobi}}
+&response_type=code
+&verified_code={{verify_code}}
+&redirect_uri={{redirect_uri}}
+&state=
+
+###
+# @name token
+POST {{auth}}/token HTTP/1.1
+Content-Type: application/json
+
+{
+    "grant_type" : "authorization_code",
+    "client_id" : "{{client_id}}",
+    "code" : "{{code}}"
+}
+
+
+###
+# @name token 密码模式
+POST {{auth}}/token HTTP/1.1
+Content-Type: application/json
+
+{
+    "grant_type" : "password",
+    "client_id" : "{{client_id}}",
+    "username" : "macro",
+    "password" : "Macro123"
+}
+
+###
+# @name refresh-token
+POST {{auth}}/token HTTP/1.1
+Content-Type: application/json
+
+{
+    "grant_type" : "refresh_token",
+    "client_id" : "{{client_id}}",
+    "refresh_token" : ""
+}
+
+
+###
+# @name 第三方授权 token-external
+POST {{auth}}/token/wechat HTTP/1.1
+Content-Type: application/json
+
+{
+    "grant_type" : "authorization_code",
+    "client_id" : "{{client_id}}",
+    "code":"{{code}}",
+    "redirect_uri" : "{{redirect_uri}}"
+}
+
