@@ -1,12 +1,15 @@
 package services
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type AccessToken struct {
-	Value        string `json:"access_token"`
+	Value        json.RawMessage `json:"access_token"`
 	TokenType    string `json:"token_type"`
 	ExpiresIn    int16  `json:"expires_in"`
-	RefreshToken string `json:"refresh_token"`
+	RefreshToken json.RawMessage `json:"refresh_token"`
 	UID          string `json:"uid"`
 	IID          string `json:"iid"`
 	Roles        string `json:"roles"`

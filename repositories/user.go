@@ -20,20 +20,14 @@ func (r *PgUserRepository) Save(user *models.User) (string, error) {
 		OnConflict("(id) DO UPDATE").
 		Insert()
 
-	if err != nil {
-		return "", err
-	}
-	return user.ID, nil
+	return user.ID, err
 
 }
 
 func (r *PgUserRepository) Find(uid string) (*models.User, error) {
 	user := &models.User{ID: uid}
 	err := r.db.Model(user).WherePK().Select()
-	if err != nil {
-		return nil, err
-	}
-	return user, nil
+	return user, err
 }
 
 func (r *PgUserRepository) Delete(id string) (bool, error) {

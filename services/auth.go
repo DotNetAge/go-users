@@ -2,6 +2,7 @@ package services
 
 import (
 	"github.com/go-redis/redis/v8"
+	"github.com/kataras/iris/v12/middleware/jwt"
 	"go-uds/repositories"
 )
 
@@ -11,21 +12,24 @@ type VerifyResponse struct {
 
 type AuthService interface {
 	AuthUser(username, password string) bool
-	AuthorizeCode(clientId, mobile, scope string) (string, error)
-	GrantVerifyCode(clientId, mobile string) (*VerifyResponse, error)
-	GrantByAuthorizationCode(client_id, code string) (*AccessToken, error)
-	GrantByRefreshToken(clientId, refreshToken string) (*AccessToken, error)
-	GrantByPassword(client_id, username, password, scope string) (*AccessToken, error)
-	GrantByClaims(client_id, name, source string, claims map[string]string) (*AccessToken, error)
-	GrantAccessToken(client_id, client_secret, identity_id, user_id, user_name, scope string, roles string) (*AccessToken, error)
-	ValidateVerifyCode(clientId, mobile, code string) bool
-	ValidateClient(clientId string) bool
+	AuthorizeCode(clientID, mobile, scope string) (string, error)
+	GrantVerifyCode(clientID, mobile string) (*VerifyResponse, error)
+	GrantByAuthorizationCode(clientID, code string) (*AccessToken, error)
+	GrantByRefreshToken(clientID, refreshToken string) (*AccessToken, error)
+	GrantByPassword(clientID, username, password, scope string) (*AccessToken, error)
+	GrantByClaims(clientID, name, source string, claims map[string]string) (*AccessToken, error)
+	GrantAccessToken(identityID, userID, userName, scope string, roles string) (*AccessToken, error)
+	ValidateVerifyCode(clientID, mobile, code string) bool
+	ValidateClient(clientID string) bool
 	ValidateMobile(mobile string) bool
 }
 
 type ServiceContext struct {
 	Identities repositories.IdentityRepository
 	Users      repositories.UserRepository
+	RefreshTokens repositories.RefreshTokenRepository
+	Signer     jwt.Signer
+	Verifier   jwt.Verifier
 	Redis      *redis.Client
 }
 

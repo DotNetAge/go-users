@@ -30,6 +30,7 @@ func InitDB() error {
 	_models := []interface{}{
 		(*models.User)(nil),
 		(*models.Identity)(nil),
+		(*models.RefreshToken)(nil),
 	}
 
 	for _, _model := range _models {

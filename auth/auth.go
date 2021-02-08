@@ -36,7 +36,7 @@ func LoginHandler(ctx iris.Context, s services.AuthService) {
 	if s.ValidateVerifyCode(authData.ClientId, authData.Mobile, authData.VerifyCode) {
 
 		if authData.ResponseType == ResponseType_Token {
-			accessToken, err := s.GrantByMobile(authData.ClientId, authData.Mobile, authData.Scope)
+			accessToken, err := s.GrantAccessToken(authData.ClientId, authData.Code)
 			if err != nil {
 				ctx.StopWithError(iris.StatusInternalServerError, err)
 				return

@@ -15,3 +15,9 @@ type UserRepository interface {
 	Find(uid string) (*models.User, error)
 	Delete(id string) (bool, error)
 }
+
+type RefreshTokenRepository interface {
+	Find(tokenKey string) (*models.RefreshToken, error)
+	Save(refreshToken *models.RefreshToken) error
+	Delete(tokenKey string) (bool, error)
+}

@@ -4,17 +4,23 @@ import "go-uds/models"
 
 func (s *authService) GrantByAuthorizationCode(clientId, code string) (*AccessToken, error) {
 	key := "authorize-codes:" + clientId + ":" + code
-	fields, err := s.Context.Redis.HMGet(ctx, key, "mobile", "scope").Result()
-	mobile := fields[0].(string)
-	scope := fields[1].(string)
+	mobile, err := s.Context.Redis.Get(ctx, key+":mobile").Result()
+	scope, s_err := s.Context.Redis.Get(ctx, key+":scope").Result()
+
 	if err != nil {
 		return nil, err
 	}
-	clientSecret := ""
+
+	if s_err != nil {
+		return nil, s_err
+	}
+
 	identity, e := s.Context.Identities.FindByName(mobile)
+
 	if e != nil {
 		return nil, e
 	}
+
 	roles := ""
 
 	if nil == identity {
@@ -33,7 +39,8 @@ func (s *authService) GrantByAuthorizationCode(clientId, code string) (*AccessTo
 		}
 	}
 
-	token, _err := s.GrantAccessToken(clientId, clientSecret, identity.ID, identity.UID, identity.Name, scope, roles)
+	token, _err := s.GrantAccessToken(identity.ID, identity.UID, identity.Name, scope, roles)
+
 	if _err != nil {
 		return nil, nil
 	}

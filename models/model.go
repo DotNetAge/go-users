@@ -1,13 +1,5 @@
 package models
 
-type ClientApp struct {
-	ID          string
-	Name        string
-	Secret      string
-	EnabledRBAC bool
-	Root        string
-}
-
 type User struct {
 	ID     string
 	Name   string
@@ -31,6 +23,15 @@ type Identity struct {
 	Password string            `json:"password,omitempty"`
 	Source   int               `json:"source,omitempty"`
 	Claims   map[string]string `json:"claims,omitempty"`
+}
+
+type RefreshToken struct {
+	Key  string
+	UserName string
+	UserID   string
+	IID      string
+	Roles    string
+	Scope    string
 }
 
 func NewIdentity(name string) *Identity {
